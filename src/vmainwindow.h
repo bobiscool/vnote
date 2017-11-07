@@ -37,6 +37,7 @@ class QSystemTrayIcon;
 class QShortcut;
 class VButtonWithWidget;
 class VAttachmentList;
+class VSnippetList;
 
 enum class PanelViewState
 {
@@ -294,8 +295,15 @@ private:
     VEditArea *editArea;
 
     QDockWidget *toolDock;
-    QToolBox *toolBox;
+
+    // Tool box in the dock widget.
+    QToolBox *m_toolBox;
+
     VOutline *outline;
+
+    // View and manage snippets.
+    VSnippetList *m_snippetList;
+
     VAvatar *m_avatar;
     VFindReplaceDialog *m_findReplaceDialog;
     VVimIndicator *m_vimIndicator;
