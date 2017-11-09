@@ -8,6 +8,8 @@ const QString VSnippet::c_defaultCursorMark = "@@";
 
 const QString VSnippet::c_defaultSelectionMark = "$$";
 
+QVector<QChar> VSnippet::s_allShortcuts;
+
 VSnippet::VSnippet()
     : m_type(Type::PlainText),
       m_cursorMark(c_defaultCursorMark)
@@ -18,12 +20,14 @@ VSnippet::VSnippet(const QString &p_name,
                    Type p_type,
                    const QString &p_content,
                    const QString &p_cursorMark,
-                   const QString &p_selectionMark)
+                   const QString &p_selectionMark,
+                   QChar p_shortcut)
     : m_name(p_name),
       m_type(p_type),
       m_content(p_content),
       m_cursorMark(p_cursorMark),
-      m_selectionMark(p_selectionMark)
+      m_selectionMark(p_selectionMark),
+      m_shortcut(p_shortcut)
 {
     Q_ASSERT(m_selectionMark != m_cursorMark);
 }
@@ -32,7 +36,8 @@ bool VSnippet::update(const QString &p_name,
                       Type p_type,
                       const QString &p_content,
                       const QString &p_cursorMark,
-                      const QString &p_selectionMark)
+                      const QString &p_selectionMark,
+                      QChar p_shortcut)
 {
     bool updated = false;
     if (m_name != p_name) {
@@ -60,6 +65,11 @@ bool VSnippet::update(const QString &p_name,
         updated = true;
     }
 
+    if (m_shortcut != p_shortcut) {
+        m_shortcut = p_shortcut;
+        updated = true;
+    }
+
     return updated;
 }
 
@@ -84,17 +94,43 @@ QJsonObject VSnippet::toJson() const
     snip[SnippetConfig::c_type] = (int)m_type;
     snip[SnippetConfig::c_cursorMark] = m_cursorMark;
     snip[SnippetConfig::c_selectionMark] = m_selectionMark;
+    snip[SnippetConfig::c_shortcut] = QString(m_shortcut);
 
     return snip;
 }
 
 VSnippet VSnippet::fromJson(const QJsonObject &p_json)
 {
+    QChar shortcut;
+    QString shortcutStr = p_json[SnippetConfig::c_shortcut].toString();
+    if (!shortcutStr.isEmpty()) {
+        isEmpty
+    }
+
     VSnippet snip(p_json[SnippetConfig::c_name].toString(),
                   static_cast<VSnippet::Type>(p_json[SnippetConfig::c_type].toInt()),
                   "",
                   p_json[SnippetConfig::c_cursorMark].toString(),
-                  p_json[SnippetConfig::c_selectionMark].toString());
+                  p_json[SnippetConfig::c_selectionMark].toString(),
+                  p_json[SnippetConfig::c_shortcut].toChar());
 
     return snip;
+}
+
+const QVector<QChar> &VSnippet::getAllShortcuts()
+{
+    if (s_allShortcuts.isEmpty()) {
+        // Init.
+        QChar ch('a');
+        while (true) {
+            s_allShortcuts.append(ch);
+            if (ch == 'z') {
+                break;
+            }
+
+            ch++;
+        }
+    }
+
+    return s_allShortcuts;
 }

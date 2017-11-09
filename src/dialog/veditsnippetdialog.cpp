@@ -48,6 +48,22 @@ void VEditSnippetDialog::setupUI(const QString &p_title, const QString &p_info)
     Q_ASSERT(typeIdx > -1);
     m_typeCB->setCurrentIndex(typeIdx);
 
+    // Shortcut.
+    m_shortcutCB = new QComboBox();
+    m_shortcutCB->addItem(tr("None"), QChar());
+    auto shortcuts = VSnippet::getAllShortcuts();
+    for (auto it : shortcuts) {
+        m_shortcutCB->addItem(it, it);
+    }
+
+    QChar sh = m_snippet.getShortcut();
+    if (sh.isNull()) {
+        m_shortcutCB->setCurrentIndex(0);
+    } else {
+        int shortcutIdx = m_shortcutCB->findData(sh);
+        m_shortcutCB->setCurrentIndex(shortcutIdx < 0 ? 0 : shortcutIdx);
+    }
+
     // Cursor mark.
     m_cursorMarkEdit = new QLineEdit(m_snippet.getCursorMark());
     m_cursorMarkEdit->setToolTip(tr("String in the content to mark the cursor position"));
@@ -63,6 +79,7 @@ void VEditSnippetDialog::setupUI(const QString &p_title, const QString &p_info)
     QFormLayout *topLayout = new QFormLayout();
     topLayout->addRow(tr("Snippet &name:"), m_nameEdit);
     topLayout->addRow(tr("Snippet &type:"), m_typeCB);
+    topLayout->addRow(tr("Shortc&ut:"), m_shortcutCB);
     topLayout->addRow(tr("Cursor &mark:"), m_cursorMarkEdit);
     topLayout->addRow(tr("&Selection mark:"), m_selectionMarkEdit);
     topLayout->addRow(tr("&Content:"), m_contentEdit);
@@ -251,4 +268,9 @@ QString VEditSnippetDialog::getSelectionMarkInput() const
 QString VEditSnippetDialog::getContentInput() const
 {
     return getContentEditByType();
+}
+
+QChar VEditSnippetDialog::getShortcutInput() const
+{
+    return m_shortcutCB->currentData().toChar();
 }

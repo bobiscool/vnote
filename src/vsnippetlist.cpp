@@ -90,7 +90,9 @@ void VSnippetList::setupUI()
 
 void VSnippetList::initActions()
 {
-    m_applyAct = new QAction(tr("&Apply"), this);
+    m_applyAct = new QAction(QIcon(":/resources/icons/apply_snippet.svg"),
+                             tr("&Apply"),
+                             this);
     m_applyAct->setToolTip(tr("Insert this snippet in editor"));
     connect(m_applyAct, &QAction::triggered,
             this, [this]() {
@@ -337,7 +339,8 @@ void VSnippetList::snippetInfo()
                          dialog.getTypeInput(),
                          dialog.getContentInput(),
                          dialog.getCursorMarkInput(),
-                         dialog.getSelectionMarkInput())) {
+                         dialog.getSelectionMarkInput(),
+                         dialog.getShortcutInput())) {
             if (!writeSnippetFile(*snip, &errMsg)) {
                 ret = false;
             }

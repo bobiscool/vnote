@@ -59,6 +59,7 @@ namespace SnippetConfig
     static const QString c_type = "type";
     static const QString c_cursorMark = "cursor_mark";
     static const QString c_selectionMark = "selection_mark";
+    static const QString c_shortcut = "shortcut";
 }
 
 static const QString c_emptyHeaderName = "[EMPTY]";

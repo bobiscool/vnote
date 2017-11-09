@@ -21,14 +21,16 @@ public:
              Type p_type = Type::PlainText,
              const QString &p_content = QString(),
              const QString &p_cursorMark = c_defaultCursorMark,
-             const QString &p_selectionMark = c_defaultSelectionMark);
+             const QString &p_selectionMark = c_defaultSelectionMark,
+             QChar p_shortcut = QChar());
 
     // Return true if there is any update.
     bool update(const QString &p_name,
                 Type p_type,
                 const QString &p_content,
                 const QString &p_cursorMark,
-                const QString &p_selectionMark);
+                const QString &p_selectionMark,
+                QChar p_shortcut);
 
     const QString &getName() const
     {
@@ -55,6 +57,11 @@ public:
         return m_content;
     }
 
+    QChar getShortcut() const
+    {
+        return m_shortcut;
+    }
+
     void setContent(const QString &p_content)
     {
         m_content = p_content;
@@ -67,6 +74,8 @@ public:
     static VSnippet fromJson(const QJsonObject &p_json);
 
     static QString typeStr(VSnippet::Type p_type);
+
+    static const QVector<QChar> &getAllShortcuts();
 
 private:
     // File name in the snippet folder.
@@ -85,9 +94,14 @@ private:
     // Selection marks in the content will be replaced by selected text.
     QString m_selectionMark;
 
+    // Shortcut to apply this snippet.
+    QChar m_shortcut;
+
     static const QString c_defaultCursorMark;
 
     static const QString c_defaultSelectionMark;
+
+    static QVector<QChar> s_allShortcuts;
 };
 
 #endif // VSNIPPET_H

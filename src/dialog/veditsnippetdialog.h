@@ -34,6 +34,8 @@ public:
 
     QString getContentInput() const;
 
+    QChar getShortcutInput() const;
+
 private slots:
     void handleInputChanged();
 
@@ -46,6 +48,7 @@ private:
 
     VLineEdit *m_nameEdit;
     QComboBox *m_typeCB;
+    QComboBox *m_shortcutCB;
     QLineEdit *m_cursorMarkEdit;
     QLineEdit *m_selectionMarkEdit;
     QTextEdit *m_contentEdit;
